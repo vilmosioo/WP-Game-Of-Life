@@ -1,14 +1,16 @@
 'use strict';
 
-var VI_GOL = (function($, screenfull, doc){
+var VI_GOL_SETTINGS = window.VI_GOL_SETTINGS || {};
+
+var VI_GOL = (function($, settings, screenfull, doc){
 	var app = {},
-		N = 125, // number of cells horizontally
+		N = settings.N || 125, // number of cells horizontally
 		M = Math.floor(N*666/1000), // number of cells vertically
 		canvas,
 		select, run, screenshot, fullscreen,
 		context,
 		running = false,
-		width = 1000,
+		width = settings.width || 1000,
 		height = Math.floor(width*666/1000),
 		patterns,
 		grid = new Array(N*M), // the grid of cells
@@ -16,7 +18,8 @@ var VI_GOL = (function($, screenfull, doc){
 
 	var _loadParams = function(){
 		// initialise canvas
-		canvas = document.getElementById('canvas-gol');
+		canvas = document.getElementById(settings.ID || 'gol-canvas');
+
 		// save reference to context
 		context = canvas.getContext('2d');
 		// calculate width/height
@@ -75,7 +78,7 @@ var VI_GOL = (function($, screenfull, doc){
 		run.click(_run);
 		if (screenfull.enabled) {
 			fullscreen.click(function(){
-				screenfull.request(canvas);
+				screenfull.request();
 			});
 		}
 		select.change(function(){
@@ -92,7 +95,7 @@ var VI_GOL = (function($, screenfull, doc){
 			for(var j=0; j < M; j++){
 				var wunit = Math.floor(width/N);
 				var hunit = Math.floor(height/M);
-				context.fillStyle   = '#aaa';
+				context.fillStyle  = settings.background || '#aaa';
 				context.fillRect(i*wunit, j*hunit, wunit, hunit);
 				context.globalAlpha = 0.1;
 				context.beginPath();
@@ -132,13 +135,21 @@ var VI_GOL = (function($, screenfull, doc){
 	var _drawCell = function(i, j){
 		var wunit = Math.floor(width/N);
 		var hunit = Math.floor(height/M);
+
+		// extract the transition color, only rgb is supported
+		var rgb = settings.cell_active_color || 'rgb(65,180,255)';
+		rgb = rgb.match(/\d+/g);
+		if(!rgb || rgb.length !== 3){
+			rgb = [65,180,255];
+		}
+
 		if(_changed(i,j)){
 			if(change[i*N+j] === 1){
-				context.fillStyle   = '#fff';
+				context.fillStyle   = settings.cell_active_color || '#fff';
 			} else if(change[i*N+j] >= 2){
-				context.fillStyle   = 'rgba(65,180,255,'+(0.75*change[i*N+j]/10)+')';
+				context.fillStyle = 'rgba('+rgb[0]+','+rgb[1]+','+rgb[2]+','+(0.75*change[i*N+j]/10)+')';
 			} else{
-				context.fillStyle   = '#000';
+				context.fillStyle = settings.cell_inactive_color || '#000';
 			}
 			context.fillRect(i*wunit, j*hunit, wunit, hunit);
 			grid[i*N + j] = change[i*N+j];
@@ -299,6 +310,6 @@ var VI_GOL = (function($, screenfull, doc){
 	};
 
 	return app;
-})(jQuery, screenfull, document);
+})(jQuery, VI_GOL_SETTINGS, screenfull, document);
 
 jQuery(VI_GOL.load);

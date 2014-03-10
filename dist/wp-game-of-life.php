@@ -49,8 +49,28 @@ class WPGameOfLife_Plugin {
 		register_deactivation_hook(__FILE__, array( &$this, 'deactivate' ) );
 		
 		// TODO write more functionality here
+		wp_register_script( 'game-of-life', WP_GAME_OF_LIFE_PLUGIN_URL.'js/game-of-life.min.js', array( 'jquery' ), '0.0.1', true );
+		add_shortcode('gol', array(&$this, 'print_canvas'));
 	} 
 
+	// Add Shortcode
+	function print_canvas( $atts ) {
+		// Load the JS library
+		wp_enqueue_script( 'game-of-life' );
+
+		// set JS settings
+    wp_localize_script( 'game-of-life', 'VI_GOL_SETTINGS', shortcode_atts(array(
+    	'ID' => self::ID,
+			'width' => '1000',
+			'cells' => '125',
+			'background' => '#aaa',
+			'cell_active_color' => '#fff',
+			'cell_inactive_color' => '#000',
+			'cell_transition_color' => 'rgb(65,180,255)'
+		), $atts ));
+
+		return "<canvas id=".self::ID."></canvas>";
+	}
 	/**
 	 * Fired when the plugin is activated.
 	 *

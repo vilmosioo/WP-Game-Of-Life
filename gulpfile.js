@@ -19,13 +19,13 @@ var config = {
 
 // clean task
 gulp.task('clean', function() {
-	gulp.src(config.dist, {read: false})
+	return gulp.src(config.dist, {read: false})
 		.pipe(clean());
 });
 
 // Copy task
 gulp.task('copy', function(){
-	gulp.src(['**/*.{php,md}', '!components/**/*'], { cwd : config.app })
+	return gulp.src(['**/*.{php,md,txt}', '!components/**/*'], { cwd : config.app })
 		.pipe(gulp.dest('dist'));
 });
 
@@ -52,8 +52,10 @@ gulp.task('scripts', ['lint'], function() {
 // Watch Files For Changes
 gulp.task('watch', function() {
 	gulp.watch(config.app + '/js/*.js', ['lint', 'scripts']);
-	gulp.watch(config.app + '/**/*.{php,md}', ['copy']);
+	gulp.watch(config.app + '/**/*.{php,md,txt}', ['copy']);
 });
 
 // Default Task
-gulp.task('default', ['clean', 'lint', 'scripts', 'copy']);
+gulp.task('default', ['clean'], function(){
+	gulp.start('lint', 'scripts', 'copy');
+});
