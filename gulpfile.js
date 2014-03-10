@@ -9,6 +9,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var stylish = require('jshint-stylish');
 var clean = require('gulp-clean');
+var replace = require('gulp-replace');
 
 // global config params
 var config = {
@@ -16,6 +17,7 @@ var config = {
 	dist: 'dist',
 	components: 'app/components'
 };
+var pck = require('./package.json');
 
 // clean task
 gulp.task('clean', function() {
@@ -27,6 +29,13 @@ gulp.task('clean', function() {
 gulp.task('copy', function(){
 	return gulp.src(['**/*.{php,md,txt}', '!components/**/*'], { cwd : config.app })
 		.pipe(gulp.dest('dist'));
+});
+
+// Replace task
+gulp.task('replace', ['copy', 'scripts'], function(){
+  return gulp.src(['**/*'], { cwd : config.dist })
+    .pipe(replace('@@version', pck.version))
+    .pipe(gulp.dest(config.dist));
 });
 
 // Lint Task
@@ -57,5 +66,5 @@ gulp.task('watch', function() {
 
 // Default Task
 gulp.task('default', ['clean'], function(){
-	gulp.start('lint', 'scripts', 'copy');
+	gulp.start('lint', 'scripts', 'copy', 'replace');
 });

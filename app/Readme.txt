@@ -3,7 +3,7 @@ Contributors: vilmosioo
 Tags: game of life, html5, canvas
 Requires at least: 3.6
 Tested up to: 3.8
-Stable tag: 0.0.1
+Stable tag: @@version
 License: GPL2
 
 A game of life simulation using HTML5 canvas. Not very useful except for entertainment purposes.
