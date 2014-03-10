@@ -1,0 +1,21 @@
+{
+  "name": "wp-game-of-life",
+  "version": "0.0.1",
+  "homepage": "https://github.com/vilmosioo/WP-Game-Of-Life",
+  "authors": [
+    "Vilmos Ioo"
+  ],
+  "description": "A game of life simulation using HTML5 canvas.",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "screenfull": "~1.1.1"
+  }
+}
