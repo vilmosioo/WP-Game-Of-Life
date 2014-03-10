@@ -48,13 +48,16 @@ class WPGameOfLife_Plugin {
 		register_activation_hook(__FILE__, array( &$this, 'activate' ) );
 		register_deactivation_hook(__FILE__, array( &$this, 'deactivate' ) );
 		
-		// TODO write more functionality here
-		wp_register_script( 'game-of-life', WP_GAME_OF_LIFE_PLUGIN_URL.'js/game-of-life.min.js', array( 'jquery' ), '@@version', true );
+		add_action( 'wp_enqueue_scripts', array(&$this, 'register_scripts') );
 		add_shortcode('gol', array(&$this, 'print_canvas'));
 	} 
 
+	public function register_scripts(){
+		wp_register_script( 'game-of-life', WP_GAME_OF_LIFE_PLUGIN_URL.'js/game-of-life.min.js', array( 'jquery' ), '@@version', true );
+	}
+
 	// Add Shortcode
-	function print_canvas( $atts ) {
+	public function print_canvas( $atts ) {
 		// Load the JS library
 		wp_enqueue_script( 'game-of-life' );
 
