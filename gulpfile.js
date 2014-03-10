@@ -27,7 +27,7 @@ gulp.task('clean', function() {
 
 // Copy task
 gulp.task('copy', function(){
-	return gulp.src(['**/*.{php,md,txt}', '!components/**/*'], { cwd : config.app })
+	return gulp.src(['**/*.{php,md,txt,png}', '!components/**/*'], { cwd : config.app })
 		.pipe(gulp.dest('dist'));
 });
 
@@ -61,7 +61,7 @@ gulp.task('scripts', ['lint'], function() {
 // Watch Files For Changes
 gulp.task('watch', function() {
 	gulp.watch(config.app + '/js/*.js', ['lint', 'scripts']);
-	gulp.watch(config.app + '/**/*.{php,md,txt}', ['copy']);
+	gulp.watch(config.app + '/**/*.{php,md,txt,png}', ['copy']);
 });
 
 // Default Task
